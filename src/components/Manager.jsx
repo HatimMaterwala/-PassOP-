@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 const Manager = () => {
   const refUrl = useRef();
@@ -19,16 +19,13 @@ const Manager = () => {
     if (storedCredentials) {
       setStorage(storedCredentials);
     }
-  }, [])
-  
+  }, []);
 
-  const saveToLS = () => {
-      try {
-    localStorage.setItem("Credentials", JSON.stringify(storage));
-  } catch (error) {
-    console.error("Error saving to localStorage:", error);
-  }
-  }
+  useEffect(() => {
+    if (storage.length > 0) {
+      localStorage.setItem("Credentials", JSON.stringify(storage));
+    }
+  }, [storage]);
 
   const handleChange = (e) => {
     if (e.target.name === "URL") {
@@ -52,7 +49,7 @@ const Manager = () => {
       refUrl.current.value = "";
       refUser.current.value = "";
       refPass.current.value = "";
-      saveToLS();
+      refUrl.current.focus();
     } else {
       alert("All fields are required!");
     }
@@ -65,30 +62,49 @@ const Manager = () => {
   };
 
   const handleEdit = (id) => {
-  const filtered = storage.filter((i)=>{return i.ID === id})
-  const unfiltered = storage.filter((i)=>{return i.ID !== id})
-  if(filtered.length > 0){
-    setUrl(filtered[0].URL)
-    setUsername(filtered[0].Username)
-    setPassword(filtered[0].Password)
-    refUrl.current.value = filtered[0].URL;
-    refUser.current.value = filtered[0].Username;
-    refPass.current.value = filtered[0].Password;
-    setStorage(unfiltered)
-    saveToLS()
-  }
-  }
+    const filtered = storage.filter((i) => {
+      return i.ID === id;
+    });
+    const unfiltered = storage.filter((i) => {
+      return i.ID !== id;
+    });
+    if (filtered.length > 0) {
+      setUrl(filtered[0].URL);
+      setUsername(filtered[0].Username);
+      setPassword(filtered[0].Password);
+      refUrl.current.value = filtered[0].URL;
+      refUser.current.value = filtered[0].Username;
+      refPass.current.value = filtered[0].Password;
+      setStorage(unfiltered);
+    }
+  };
 
   const handleDelete = (id) => {
-    let c = confirm('Are you sure you want to delete your credentials ?')
+    let c = confirm("Are you sure you want to delete your credentials ?");
     if (c) {
       const updatedStorage = storage.filter((i) => {
-        return i.ID!== id
+        return i.ID !== id;
       });
       setStorage(updatedStorage);
-      saveToLS();
-    } 
-  }
+    }
+  };
+
+  const handleEye = (e,id) => {
+    const tdElement = e.currentTarget.closest('td');
+    const passwordSpan = tdElement.querySelector('span');
+    
+    if (passwordSpan.textContent === '•'.repeat(passwordSpan.textContent.length)) {
+      const password = storage.find(item => item.ID === id).Password;
+      passwordSpan.textContent = password;
+      passwordSpan.style.overflow = 'visible'
+      passwordSpan.style.textOverflow = 'clip'
+      e.currentTarget.textContent = 'visibility';
+    } else {
+      passwordSpan.textContent = '•'.repeat(8);
+      e.currentTarget.textContent = 'visibility_off';
+    }
+  };
+  
 
   return (
     <>
@@ -130,7 +146,7 @@ const Manager = () => {
               ref={refPass}
               onChange={handleChange}
               className="w-1/3 border border-green-500 text-black p-1 px-3 rounded-full"
-              type="text"
+              type="password"
               name="Password"
               placeholder="Enter Password"
             />
@@ -138,7 +154,7 @@ const Manager = () => {
 
           <button
             onClick={handleSubmit}
-            className=" flex gap-1 border border-black cursor-pointer hover:bg-green-400 text-black bg-green-500 px-6 font-bold py-2 rounded-full "
+            className="flex gap-1 border border-black cursor-pointer hover:bg-green-400 text-black bg-green-500 px-6 font-bold py-2 rounded-full "
           >
             <span className="material-symbols-outlined invert-1">save</span>
             <span>Save</span>
@@ -166,44 +182,46 @@ const Manager = () => {
               {storage.map((lup) => (
                 <tr key={lup.ID} className="bg-green-100 hover:bg-green-200">
                   <td className="p-2 space-x-3 relative">
-                    <span>{lup.URL}</span>
+                    <span className="inline-block w-[50vh] px-2 overflow-hidden text-ellipsis">{lup.URL}</span>
                     <span
                       onClick={(e) => {
                         handleCopy(e, lup.URL);
                       }}
                       name="URL"
-                      className="material-symbols-outlined cursor-pointer absolute"
+                      className="material-symbols-outlined absolute right-8 cursor-pointer"
                     >
                       content_copy
                     </span>
                   </td>
                   <td className="p-2 space-x-3 relative">
-                    <span>{lup.Username}</span>
+                    <span className="inline-block w-[25vh] overflow-hidden text-ellipsis">{lup.Username}</span>
                     <span
                       onClick={(e) => {
                         handleCopy(e, lup.Username);
                       }}
                       name="Username"
-                      className="material-symbols-outlined cursor-pointer absolute"
-                    >
+                      className="material-symbols-outlined absolute cursor-pointer"
+                    > 
                       content_copy
                     </span>
                   </td>
-                  <td className="p-2 space-x-3 relative">
-                    <span>{lup.Password}</span>
+                  <td className="p-2 space-x-1 relative">
+                    <span className="inline-block w-[10vw] overflow-hidden text-ellipsis">{"•".repeat(8)}</span>
+                    <span onClick={(e)=>{handleEye(e,lup.ID)}} className="material-symbols-outlined absolute cursor-pointer">visibility_off</span>
+                  </td>
+                  <td className="p-2 space-x-1 relative">
                     <span
-                      onClick={(e) => {
-                        handleCopy(e, lup.Password);
-                      }}
-                      name="Password"
-                      className="material-symbols-outlined cursor-pointer absolute"
+                      onClick={() => handleEdit(lup.ID)}
+                      className="material-symbols-outlined cursor-pointer"
                     >
-                      content_copy
+                      edit
                     </span>
-                  </td>
-                  <td className="p-2 space-x-3 relative">
-                    <span onClick={()=>handleEdit(lup.ID)} className="material-symbols-outlined cursor-pointer">edit</span>
-                    <span onClick={()=>handleDelete(lup.ID)} className="material-symbols-outlined cursor-pointer">delete</span>
+                    <span
+                      onClick={() => handleDelete(lup.ID)}
+                      className="material-symbols-outlined cursor-pointer"
+                    >
+                      delete
+                    </span>
                   </td>
                 </tr>
               ))}
