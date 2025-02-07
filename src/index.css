@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
-.divTable{
-    scrollbar-width: none !important;
-}
+/* .divTable{
+    scrollbar-x-width: none !important;
+} */
+
+.custom-scrollbar {
+    overflow-x: auto;
+    overflow-y: auto;
+    scrollbar-width: thin; /* For Firefox */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 6px; /* Width of the horizontal scrollbar */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    /* background-color: rgba(0, 0, 0, 0.3); */
+    background-color: (0, 128, 0, 0.506);   
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: rgba(0, 128, 0, 0.506)
+  }
+  

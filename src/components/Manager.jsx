@@ -11,7 +11,7 @@ const Manager = () => {
   const [url, setUrl] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const visibility = document.querySelector('.visibilitySpan');
+  const visibility = document.querySelector(".visibilitySpan");
 
   const [storage, setStorage] = useState([]);
 
@@ -21,12 +21,11 @@ const Manager = () => {
       setStorage(storedCredentials);
     }
   }, []);
-  
 
   useEffect(() => {
     if (storage.length > 0) {
       localStorage.setItem("Credentials", JSON.stringify(storage));
-      visibility.textContent = 'visibility_off'
+      visibility.textContent = "visibility_off";
     }
   }, [storage]);
 
@@ -105,8 +104,10 @@ const Manager = () => {
       passwordSpan.style.textOverflow = "clip";
       e.currentTarget.textContent = "visibility";
     } else {
-      passwordSpan.textContent = "•".repeat(8);
+      passwordSpan.textContent = "•".repeat(passwordSpan.textContent.length);
       e.currentTarget.textContent = "visibility_off";
+      passwordSpan.style.overflow = "hidden";
+      passwordSpan.style.textOverflow = "clip";
     }
   };
 
@@ -139,31 +140,31 @@ const Manager = () => {
         </div>
 
         <div className="text-white flex flex-col gap-3 items-center p-4 w-full">
-          <div className="url w-1/2 ">
+          <div className="url w-full md:w-1/2 ">
             <input
               ref={refUrl}
               onChange={handleChange}
-              className="w-full border border-green-500 text-black p-2 px-3 rounded-full"
+              className="w-full border border-green-500 text-black p-2 px-3  rounded-full"
               type="text"
               name="URL"
               placeholder="Enter Website URL"
             />
           </div>
 
-          <div className="relative idPass flex gap-3 w-1/2">
+          <div className="relative idPass flex flex-col md:flex-row w-full gap-3 md:w-1/2">
             <input
               ref={refUser}
               onChange={handleChange}
-              className="w-2/3 border border-green-500 text-black p-1 px-3 rounded-full"
+              className="w-full md:w-2/3 border border-green-500 text-black p-2 px-3 md:p-1 md:px-3 rounded-full"
               type="text"
               name="Username"
               placeholder="Enter Username"
             />
-            <div className="border border-green-500 text-black p-1 px-3 rounded-full">
+            <div className="border relative border-green-500 text-black p-1 md:px-3 rounded-full">
               <input
                 ref={refPass}
                 onChange={handleChange}
-                className="w-[85%] text-black p-1 px-3 outline-none"
+                className="w-[85%] text-black p-1 px-2 md:px-3 outline-none"
                 type="password"
                 name="Password"
                 placeholder="Enter Password"
@@ -172,7 +173,7 @@ const Manager = () => {
                 onClick={(e) => {
                   handleEyeForm(e);
                 }}
-                className="visibilitySpan material-symbols-outlined absolute right-3 top-2.5 cursor-pointer"
+                className="visibilitySpan material-symbols-outlined absolute md:right-3 md:top-2.5 top-2 right-[1rem] cursor-pointer"
               >
                 visibility_off
               </span>
@@ -188,9 +189,9 @@ const Manager = () => {
           </button>
         </div>
 
-        <div className="displayPasswords my-5 m-auto w-full">
+        <div className="displayPasswords my-5 mx-5 md:m-auto md:w-full">
           <h1 className="text-xl font-semibold">Your Passwords</h1>
-          <div className="divTable rounded-t-xl my-5 max-h-[35vh] overflow-y-scroll overflow-x-hidden">
+          <div className="custom-scrollbar rounded-t-xl my-5 max-h-[26.5vh] md:max-h-[35vh] overflow-y-scroll overflow-x-scroll md:overflow-x-hidden">
             <table className="w-full text-center">
               <thead>
                 {storage.length > 0 ? (
@@ -209,48 +210,60 @@ const Manager = () => {
               <tbody>
                 {storage.map((lup) => (
                   <tr key={lup.ID} className="bg-green-100 hover:bg-green-200">
-                    <td className="p-2 space-x-3 relative">
-                      <span className="inline-block w-[30vw] px-2 overflow-hidden text-ellipsis">
-                        {lup.URL}
-                      </span>
-                      <span
-                        onClick={(e) => {
-                          handleCopy(e, lup.URL);
-                        }}
-                        name="URL"
-                        className="material-symbols-outlined absolute right-8 cursor-pointer"
-                      >
-                        content_copy
-                      </span>
+                    <td className="p-2">
+                      <div className="flex justify-around items-center">
+                        <div className="text-center w-[25vw]">
+                          <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
+                            {lup.URL}
+                          </span>
+                        </div>
+                        <span
+                          onClick={(e) => {
+                            handleCopy(e, lup.URL);
+                          }}
+                          name="URL"
+                          className="material-symbols-outlined cursor-pointer"
+                        >
+                          content_copy
+                        </span>
+                      </div>
                     </td>
-                    <td className="p-2 space-x-3 relative">
-                      <span className="inline-block w-[15vw] px-2 overflow-hidden text-ellipsis">
-                        {lup.Username}
-                      </span>
-                      <span
-                        onClick={(e) => {
-                          handleCopy(e, lup.Username);
-                        }}
-                        name="Username"
-                        className="material-symbols-outlined absolute -right-1.5 cursor-pointer"
-                      >
-                        content_copy
-                      </span>
+                    <td className="p-2">
+                        <div className="flex justify-around items-center">
+                          <div className="text-center w-[10vw]   md:w-[15vw]">
+                            <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
+                              {lup.Username}
+                            </span>
+                          </div>
+                          <span
+                            onClick={(e) => {
+                              handleCopy(e, lup.Username);
+                            }}
+                            name="Username"
+                            className="material-symbols-outlined cursor-pointer"
+                          >
+                            content_copy
+                          </span>
+                        </div>
                     </td>
-                    <td className="p-2 space-x-1 relative">
-                      <span className="inline-block w-[15vw] overflow-hidden text-ellipsis">
-                        {"•".repeat(8)}
-                      </span>
-                      <span
-                        onClick={(e) => {
-                          handleEye(e, lup.ID);
-                        }}
-                        className="material-symbols-outlined absolute right-3 cursor-pointer"
-                      >
-                        visibility_off
-                      </span>
+                    <td className="p-2">
+                      <div className="flex justify-around items-center">
+                        <div className="text-center w-[10vw]  md:w-[10vw]">
+                          <span className="inline-block w-[80%] overflow-hidden">
+                            {"•".repeat(lup.Password.length)}
+                          </span>
+                        </div>
+                        <span
+                          onClick={(e) => {
+                            handleEye(e, lup.ID);
+                          }}
+                          className="material-symbols-outlined cursor-pointer"
+                        >
+                          visibility_off
+                        </span>
+                      </div>
                     </td>
-                    <td className="p-2 space-x-1 relative">
+                    <td className="p-2 space-x-1">
                       <span
                         onClick={() => handleEdit(lup.ID)}
                         className="material-symbols-outlined cursor-pointer"
