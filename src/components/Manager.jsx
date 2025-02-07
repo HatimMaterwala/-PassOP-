@@ -1,4 +1,5 @@
 import React from "react";
+import { ToastContainer, toast } from 'react-toastify';
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -52,6 +53,16 @@ const Manager = () => {
       refUser.current.value = "";
       refPass.current.value = "";
       refUrl.current.focus();
+      toast('✅ Saved Succesfully!!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } else {
       alert("All fields are required!");
     }
@@ -59,8 +70,16 @@ const Manager = () => {
 
   const handleCopy = (e, value) => {
     navigator.clipboard.writeText(value);
-    const fieldName = e.currentTarget.getAttribute("name");
-    alert(`${fieldName} copied to clipboard`);
+    toast('🔗 Copied to Clipboard!!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
   };
 
   const handleEdit = (id) => {
@@ -88,6 +107,16 @@ const Manager = () => {
         return i.ID !== id;
       });
       setStorage(updatedStorage);
+      toast('🗑️ Deleted Successfully!!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
 
@@ -126,11 +155,12 @@ const Manager = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-green-400 opacity-20 blur-[100px]"></div>
       </div>
 
-      <div className="container w-full m-auto my-10">
+      <div className="w-[90vw] m-auto my-10">
         <div className="title text-center">
           <h1 className="text-3xl font-bold">
             <span className="text-green-500">&lt;</span>Pass
@@ -160,7 +190,7 @@ const Manager = () => {
               name="Username"
               placeholder="Enter Username"
             />
-            <div className="border relative border-green-500 text-black p-1 md:px-3 rounded-full">
+            <div className="border relative border-green-500 text-black p-1 md:px-3 md:w-1/3 rounded-full">
               <input
                 ref={refPass}
                 onChange={handleChange}
@@ -191,7 +221,7 @@ const Manager = () => {
 
         <div className="displayPasswords my-5 mx-5 md:m-auto md:w-full">
           <h1 className="text-xl font-semibold">Your Passwords</h1>
-          <div className="custom-scrollbar rounded-t-xl my-5 max-h-[26.5vh] md:max-h-[35vh] overflow-y-scroll overflow-x-scroll md:overflow-x-hidden">
+          <div className="w-full custom-scrollbar rounded-l-xl my-5 max-h-[26.5vh] md:max-h-[35vh] overflow-y-scroll overflow-x-scroll md:overflow-x-hidden">
             <table className="w-full text-center">
               <thead>
                 {storage.length > 0 ? (
@@ -212,6 +242,7 @@ const Manager = () => {
                   <tr key={lup.ID} className="bg-green-100 hover:bg-green-200">
                     <td className="p-2">
                       <div className="flex justify-around items-center">
+                        <div></div>
                         <div className="text-center w-[25vw]">
                           <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
                             {lup.URL}
@@ -229,8 +260,9 @@ const Manager = () => {
                       </div>
                     </td>
                     <td className="p-2">
-                        <div className="flex justify-around items-center">
-                          <div className="text-center w-[10vw]   md:w-[15vw]">
+                        <div className="flex justify-evenly items-center">
+                          <div></div>
+                          <div className="text-center w-[10vw] md:w-[15vw]">
                             <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
                               {lup.Username}
                             </span>
@@ -248,7 +280,8 @@ const Manager = () => {
                     </td>
                     <td className="p-2">
                       <div className="flex justify-around items-center">
-                        <div className="text-center w-[10vw]  md:w-[10vw]">
+                        <div></div>
+                        <div className="text-center w-[10vw] md:w-[10vw]">
                           <span className="inline-block w-[80%] overflow-hidden">
                             {"•".repeat(lup.Password.length)}
                           </span>
