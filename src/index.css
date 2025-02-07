@@ -24,4 +24,8 @@
     /* background-color: rgba(0, 0, 0, 0.1); */
     background-color: rgba(0, 128, 0, 0.506)
   }
+
+  .expanded-width {
+    width: auto; /* Adjust as needed to fit the content */
+  }
   

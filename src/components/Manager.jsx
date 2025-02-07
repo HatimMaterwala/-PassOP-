@@ -1,5 +1,5 @@
 import React from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -15,6 +15,7 @@ const Manager = () => {
   const visibility = document.querySelector(".visibilitySpan");
 
   const [storage, setStorage] = useState([]);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   useEffect(() => {
     const storedCredentials = JSON.parse(localStorage.getItem("Credentials"));
@@ -53,7 +54,7 @@ const Manager = () => {
       refUser.current.value = "";
       refPass.current.value = "";
       refUrl.current.focus();
-      toast('✅ Saved Succesfully!!', {
+      toast("✅ Saved Succesfully!!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -62,7 +63,7 @@ const Manager = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
     } else {
       alert("All fields are required!");
     }
@@ -70,7 +71,7 @@ const Manager = () => {
 
   const handleCopy = (e, value) => {
     navigator.clipboard.writeText(value);
-    toast('🔗 Copied to Clipboard!!', {
+    toast("🔗 Copied to Clipboard!!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -79,7 +80,7 @@ const Manager = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
+    });
   };
 
   const handleEdit = (id) => {
@@ -107,7 +108,7 @@ const Manager = () => {
         return i.ID !== id;
       });
       setStorage(updatedStorage);
-      toast('🗑️ Deleted Successfully!!', {
+      toast("🗑️ Deleted Successfully!!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -116,7 +117,7 @@ const Manager = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
     }
   };
 
@@ -132,11 +133,13 @@ const Manager = () => {
       passwordSpan.style.overflow = "visible";
       passwordSpan.style.textOverflow = "clip";
       e.currentTarget.textContent = "visibility";
+      setIsPasswordVisible(true);
     } else {
       passwordSpan.textContent = "•".repeat(passwordSpan.textContent.length);
       e.currentTarget.textContent = "visibility_off";
       passwordSpan.style.overflow = "hidden";
       passwordSpan.style.textOverflow = "clip";
+      setIsPasswordVisible(false);
     }
   };
 
@@ -260,40 +263,42 @@ const Manager = () => {
                       </div>
                     </td>
                     <td className="p-2">
-                        <div className="flex justify-evenly items-center">
-                          <div></div>
-                          <div className="text-center w-[10vw] md:w-[15vw]">
-                            <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
-                              {lup.Username}
-                            </span>
-                          </div>
-                          <span
-                            onClick={(e) => {
-                              handleCopy(e, lup.Username);
-                            }}
-                            name="Username"
-                            className="material-symbols-outlined cursor-pointer"
-                          >
-                            content_copy
-                          </span>
-                        </div>
-                    </td>
-                    <td className="p-2">
-                      <div className="flex justify-around items-center">
+                      <div className="flex justify-evenly items-center">
                         <div></div>
-                        <div className="text-center w-[10vw] md:w-[10vw]">
-                          <span className="inline-block w-[80%] overflow-hidden">
-                            {"•".repeat(lup.Password.length)}
+                        <div className="text-center w-[10vw] md:w-[15vw]">
+                          <span className="inline-block w-[80%] overflow-hidden text-ellipsis">
+                            {lup.Username}
                           </span>
                         </div>
                         <span
                           onClick={(e) => {
-                            handleEye(e, lup.ID);
+                            handleCopy(e, lup.Username);
                           }}
+                          name="Username"
                           className="material-symbols-outlined cursor-pointer"
                         >
-                          visibility_off
+                          content_copy
                         </span>
+                      </div>
+                    </td>
+                    <td className="p-2">
+                      <div className="flex justify-around items-center gap-2">
+                        <div></div>
+                        <div className="text-center w-full">
+                          <span className="inline-block overflow-hidden">
+                            {"•".repeat(lup.Password.length)}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            onClick={(e) => {
+                              handleEye(e, lup.ID);
+                            }}
+                            className="material-symbols-outlined cursor-pointer"
+                          >
+                            visibility_off
+                          </span>
+                        </div>
                       </div>
                     </td>
                     <td className="p-2 space-x-1">
