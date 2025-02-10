@@ -285,7 +285,7 @@ const Manager = () => {
                       <div className="flex justify-around items-center gap-2">
                         <div></div>
                         <div className="text-center w-full">
-                          <span className="inline-block overflow-hidden">
+                          <span className="inline-block  overflow-hidden">
                             {"•".repeat(lup.Password.length)}
                           </span>
                         </div>
