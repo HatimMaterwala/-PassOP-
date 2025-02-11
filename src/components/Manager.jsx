@@ -224,7 +224,8 @@ const Manager = () => {
 
         <div className="displayPasswords my-5 mx-5 md:m-auto md:w-full">
           <h1 className="text-xl font-semibold">Your Passwords</h1>
-          <div className="w-full custom-scrollbar rounded-l-xl my-5 max-h-[26.5vh] md:max-h-[35vh] overflow-y-scroll overflow-x-scroll md:overflow-x-hidden">
+          {/* <div className="w-full custom-scrollbar rounded-l-xl my-5 max-h-[26.5vh] md:max-h-[35vh] overflow-y-scroll overflow-x-scroll md:overflow-x-hidden"> */}
+          <div className="table-container custom-scrollbar">
             <table className="w-full text-center">
               <thead>
                 {storage.length > 0 ? (
@@ -285,7 +286,7 @@ const Manager = () => {
                       <div className="flex justify-around items-center gap-2">
                         <div></div>
                         <div className="text-center w-full">
-                          <span className="inline-block  overflow-hidden">
+                          <span className="inline-block overflow-hidden">
                             {"•".repeat(lup.Password.length)}
                           </span>
                         </div>
