@@ -1,4 +1,4 @@
-// Internship Proj -2 
+// Internship Proj -2
 
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 const Manager = () => {
   const refUrl = useRef();
   const refUser = useRef();
+  const outlinePass = useRef();
   const refPass = useRef();
   const [url, setUrl] = useState("");
   const [username, setUsername] = useState("");
@@ -45,10 +46,27 @@ const Manager = () => {
 
   const handleSubmit = () => {
     if (url && password && username) {
+      const isDuplicate = storage.some((item) => item.URL === url && item.Username === username);
+  
+      if (isDuplicate) {
+        toast("⚠️ URL and Username already exist!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return; // Stop execution if duplicate is found
+      }
+  
       setStorage([
         ...storage,
         { ID: uuidv4(), URL: url, Username: username, Password: password },
       ]);
+  
       setUrl("");
       setUsername("");
       setPassword("");
@@ -56,7 +74,8 @@ const Manager = () => {
       refUser.current.value = "";
       refPass.current.value = "";
       refUrl.current.focus();
-      toast("✅ Saved Succesfully!!", {
+  
+      toast("✅ Saved Successfully!!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -70,6 +89,7 @@ const Manager = () => {
       alert("All fields are required!");
     }
   };
+  
 
   const handleCopy = (e, value) => {
     navigator.clipboard.writeText(value);
@@ -174,7 +194,7 @@ const Manager = () => {
           <p>Your Own Password Manager</p>
         </div>
 
-        <div className="text-white flex flex-col gap-3 items-center p-4 w-full">
+        <div className="text-white flex flex-col gap-3 items-center p-4 w-full h-fit">
           <div className="url w-full md:w-1/2 ">
             <input
               ref={refUrl}
@@ -195,10 +215,16 @@ const Manager = () => {
               name="Username"
               placeholder="Enter Username"
             />
-            <div className="border relative border-green-500 text-black p-1 md:px-3 md:w-1/3 rounded-full">
+            <div ref={outlinePass} className="border relative border-green-500 text-black p-1 md:px-3 md:w-1/3 rounded-full">
               <input
                 ref={refPass}
                 onChange={handleChange}
+                onFocus={()=>{outlinePass.current.style.outline = "2px solid black";
+                  outlinePass.current.style.border = '1px solid transparent';
+                }}
+                onBlur={()=>{outlinePass.current.style.outline = "none";
+                  outlinePass.current.style.border = '1px solid #22c55e';
+                }}
                 className="w-[85%] text-black p-1 px-2 md:px-3 outline-none"
                 type="password"
                 name="Password"
@@ -208,6 +234,7 @@ const Manager = () => {
                 onClick={(e) => {
                   handleEyeForm(e);
                 }}
+                
                 className="visibilitySpan material-symbols-outlined absolute md:right-3 md:top-2.5 top-2 right-[1rem] cursor-pointer"
               >
                 visibility_off
